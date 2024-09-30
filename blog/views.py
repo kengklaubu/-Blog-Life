@@ -148,11 +148,16 @@ def write_blog(request):
 
 
 from django.shortcuts import render
-from .models import Blog  # นำเข้ารุ่น Blog
-@login_required
+from .models import Blog
+
 def blog_list(request):
-    blogs = Blog.objects.all()  # ดึงข้อมูลบล็อกทั้งหมดจากฐานข้อมูล
+    query = request.GET.get('q')
+    if query:
+        blogs = Blog.objects.filter(title__icontains=query)  # ค้นหาโดยใช้ชื่อบล็อก
+    else:
+        blogs = Blog.objects.all()
     return render(request, 'blog/blog_list.html', {'blogs': blogs})
+
 
 
 from django.shortcuts import render, get_object_or_404
@@ -223,7 +228,7 @@ def edit_blog(request, blog_id):
 def delete_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
     if blog.author != request.user:
-        return redirect('bloglist')  # ป้องกันไม่ให้คนอื่นลบ Blog ของผู้อื่นได้
+        return redirect('bloglist')  
 
     if request.method == 'POST':
         blog.delete()

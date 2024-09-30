@@ -7,7 +7,8 @@
     <title>Blog Life</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -18,7 +19,8 @@
 
         main {
             flex-grow: 1;
-            padding-bottom: 2rem; /* เพิ่มที่ว่างให้กับ Footer */
+            padding-bottom: 2rem;
+            /* เพิ่มที่ว่างให้กับ Footer */
         }
 
         .content-wrapper {
@@ -36,39 +38,21 @@
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1><a href="{% url 'home' %}" class="text-3xl font-extrabold text-blue-600">Blog Life</a></h1>
             <ul class="flex space-x-6 items-center">
-                <li><a href="{% url 'home' %}"
-                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Home</a></li>
-                <li><a href="{% url 'about' %}"
-                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a></li>
-                <li><a href="{% url 'bloglist' %}"
-                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
+                <li><a href="{% url 'home' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Home</a></li>
+                <li><a href="{% url 'about' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a></li>
+                <li><a href="{% url 'bloglist' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
                 <li><a href="{% url 'write_blog' %}" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
-                <li><a href="{% url 'contact' %}"
-                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
-
-                <!-- Profile Section -->
-                <li class="relative">
-                    <div class="flex items-center space-x-2 cursor-pointer" id="profile-menu-toggle">
-                        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="User Profile"
-                            class="w-8 h-8 rounded-full">
-                        <span class="text-gray-600 hover:text-gray-900">Profile</span>
-                    </div>
-                    <!-- Dropdown Menu -->
-                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden">
-                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">View
-                            Profile</a>
-                        <a href="{% url 'setting' %}"
-                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
-                        <form id="logout-form" method="POST" action="{% url 'logout' %}" class="block">
-                            {% csrf_token %}
-                            <button type="submit"
-                                class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none">
-                                Logout
-                            </button>
-                        </form>
-                    </div>
-                </li>
+                <li><a href="{% url 'contact' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
             </ul>
+        </div>
+    
+        <!-- Search Form -->
+        <div class="container mx-auto px-4 py-4">
+            <form method="GET" action="{% url 'bloglist' %}" class="flex justify-center">
+                <input type="text" name="q" placeholder="Search blogs..."
+                       class="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Search</button>
+            </form>
         </div>
     </nav>
 
@@ -82,12 +66,14 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for blog in blogs %}
                 <!-- Blog Card -->
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <div
+                    class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
                     <a href="{% url 'blog_details' blog.id %}">
                         {% if blog.image %}
-                            <img src="{{ blog.image.url }}" alt="Blog Image" class="w-full h-48 object-cover">
+                        <img src="{{ blog.image.url }}" alt="Blog Image" class="w-full h-48 object-cover">
                         {% else %}
-                            <img src="/path/to/default/image.jpg" alt="Default Image" class="w-full h-48 object-cover"> <!-- ใส่ path ของรูปภาพ default ที่ต้องการ -->
+                        <img src="/path/to/default/image.jpg" alt="Default Image" class="w-full h-48 object-cover">
+                        <!-- ใส่ path ของรูปภาพ default ที่ต้องการ -->
                         {% endif %}
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-gray-800 mb-4">{{ blog.title }}</h3>
@@ -104,7 +90,7 @@
                 {% endfor %}
             </div>
         </section>
-        
+
     </main>
 
     <!-- Footer -->
