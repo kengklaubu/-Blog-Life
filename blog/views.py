@@ -189,6 +189,55 @@ def password_reset_view(request):
 
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Blog
+
+def edit_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    if request.method == 'POST':
+        # อัปเดตฟิลด์จากข้อมูลที่ส่งมาจากฟอร์ม
+        blog.title = request.POST.get('title')
+        blog.category = request.POST.get('category')
+        blog.content = request.POST.get('content')
+
+        # อัปเดตรูปภาพหากมีการอัปโหลดใหม่
+        if request.FILES.get('image'):
+            blog.image = request.FILES['image']
+        
+        # บันทึกการเปลี่ยนแปลง
+        blog.save()
+
+        # เปลี่ยนเส้นทางไปที่หน้ารายละเอียดของบล็อก
+        return redirect('blog_details', blog_id=blog.id)
+
+    # แสดงหน้าแก้ไขบล็อก
+    return render(request, 'blog/edit_blog.html', {'blog': blog})
+
+
+
+
+
+# ฟังก์ชันลบ Blog
+@login_required
+def delete_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    if blog.author != request.user:
+        return redirect('bloglist')  # ป้องกันไม่ให้คนอื่นลบ Blog ของผู้อื่นได้
+
+    if request.method == 'POST':
+        blog.delete()
+        return redirect('bloglist')
+
+    return render(request, 'blog/confirm_delete.html', {'blog': blog})
+
+
+
+
+
+
+
+
 
 
 

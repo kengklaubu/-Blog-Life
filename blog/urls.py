@@ -28,6 +28,8 @@ urlpatterns = [
     path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('edit/<int:blog_id>/', views.edit_blog, name='edit_blog'),
+    path('delete/<int:blog_id>/', views.delete_blog, name='delete_blog'),
 
 
 
