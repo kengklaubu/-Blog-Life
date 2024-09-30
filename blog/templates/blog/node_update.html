@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* เพิ่มเงาเล็กน้อยใน navbar เมื่อมีการเลื่อน */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky-nav">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1><a href="{% url 'home' %}" class="text-3xl font-extrabold text-blue-600">Blog Life</a></h1>
+            <ul class="flex space-x-6 items-center">
+                <li><a href="{% url 'home' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Home</a></li>
+                <li><a href="{% url 'about' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a></li>
+                <li><a href="{% url 'bloglist' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
+                <li><a href="{% url 'write_blog' %}" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
+                <li><a href="{% url 'contact' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
+    
+                <!-- Profile Section -->
+                <li class="relative">
+                    <div class="flex items-center space-x-2 cursor-pointer" id="profile-menu-toggle">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="User Profile" class="w-8 h-8 rounded-full">
+                        <span class="text-gray-600 hover:text-gray-900">Profile</span>
+                    </div>
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden">
+                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">View Profile</a>
+                        <a href="({% url 'setting' %})" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
+                        <form id="logout-form" method="POST" action="{% url 'logout' %}" class="block">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <script>
+        // Script to handle dropdown toggle
+        const profileMenuToggle = document.getElementById('profile-menu-toggle');
+        const profileMenu = document.getElementById('profile-menu');
+    
+        profileMenuToggle.addEventListener('click', () => {
+            // Toggle visibility of the dropdown menu
+            profileMenu.classList.toggle('hidden');
+        });
+    
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            if (!profileMenuToggle.contains(event.target) && !profileMenu.contains(event.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
+    <!-- Main Headline Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-20">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl font-extrabold mb-4">Node 20: What’s new in the latest version of Node?</h1>
+            <p class="text-lg mb-8">Node 20: What’s new in the latest version of Node?.</p>
+        </div>
+    </section>
+
+    <!-- News Details Section -->
+    <section class="container mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Main News Article -->
+            <article class="col-span-2 bg-white shadow-md rounded-lg p-8">
+                <img src="https://taglineinfotech.com/wp-content/uploads/2023/10/Whats-New-in-Node-20-Features-and-Updates.png"
+                    alt="Climate Conference" class="w-full h-64 object-cover rounded-lg mb-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">What’s new in the latest version of Node?</h2>
+                <p class="text-gray-700 mb-6 leading-relaxed">
+                    The Node 20 latest version is launched with many features and upgrades compared to the previous
+                    versions regarding error handling, performance, etc. Here let’s know about its latest version of
+                    Node
+
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        Node.js Permission Model
+                    </h2>
+                    Node.js v20 introduces the Permission Model feature developed by Rafael Gonzaga. This experimental
+                    mechanism empowers developers to control access to resources like file operations, child process
+                    spawning, system functions, and worker thread creation while their programs run.
+
+                    To utilize this feature, developers must enable the ‘–experimental-permission’ flag, which restricts
+                    access to all available permissions.
+
+                    This capability allows developers to prevent unauthorized access, safeguard sensitive data, and
+                    prevent the execution of malicious code within their applications.
+
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        Custom ESM Loader Hooks are More Stable
+                    </h2>
+                    Custom hooks provided through loaders (using ‘–experimental-loader=./foo.mjs’) now operate in a
+                    dedicated thread, distinct from the main line.
+
+                    This separation offers loaders a unique scope, ensuring no interference or code-mixing between
+                    loaders and the application.
+
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        Synchronous important. Meta.resolve()
+                    </h2>
+                    Synchronizing with the browser performance, the “import.meta.resolve “function can be synchronized.
+                    The user can define the loader resolve hooks as synchronous or asynchronous functions based on their
+                    performance.
+
+                    Even if many other async resolve hooks are being loaded, the import. Meta. Resolve will be returned
+                    synchronously in the code.
+
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        V8 Upgrade To 11.3
+                    </h2>
+                    Thanks to Michael Zasso’s contribution, Node.js 20 now includes a whole new version of the V8
+                    engine. As part of Chromium 113, the V8 engine has been updated to version 11.3.
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    The Node.js community and team are known for breaking barriers globally for their recent updates and
+                    features and following their conventional trend of success for Node 19..
+                </p>
+                <p class="text-gray-700 leading-relaxed"></p>
+                Also, the Node latest version is returning with Node.js 20. Our blog post will cover the newest Node 20
+                updates and features. Additionally, we have compiled the information about the changes introduced by the
+                latest Node 20 version for business owners and the developer community.
+                </p>
+                <p class="text-gray-700 leading-relaxed"></p>
+                Look at the upgrades you need to know about Node 19 after the Node v20 release.
+                </p>
+                <p class="text-gray-700 leading-relaxed"></p>
+                Due to its unique features, the Node.js community do not need any introduction. If you are using the
+                older version of Node.js, it will be best to update it to upgrade your experience. You can also install
+                the recent Node.js for your Mac and Windows by following simple steps. The latest version of Node is
+                available in the market; you can use the updated version in your system.
+                </p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    New syntax for type parameters — type
+                </h2>
+                <p class="text-gray-700 leading-relaxed">
+                    Let's recall that in Python 3.5 (PEP 484), the concept of type hints for variables was introduced.
+                    The development of this idea continued with PEP 612, which introduced parameter specifications, and
+                    PEP 646, which extended this concept to variable annotations for variational types.
+                    While generic types and type parameters have become popular, the syntax for defining type parameters
+                    still looks somewhat "attached" to Python. This has led to confusion among Python developers.
+                </p>
+            </article>
+
+            <!-- Related News Section -->
+            <aside class="col-span-1 space-y-8">
+                <!-- News Blog Section -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">News Blog</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                Renewable Energy: The Key to a Greener Future
+                            </a>
+                            <p class="text-gray-600">How renewable energy sources are transforming industries worldwide.
+                            </p>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                How Global Warming is Affecting Arctic Wildlife
+                            </a>
+                            <p class="text-gray-600">Examining the changes in Arctic ecosystems due to rising
+                                temperatures.</p>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                Innovations in Carbon Capture Technology
+                            </a>
+                            <p class="text-gray-600">New technologies aiming to capture and store CO2 from the
+                                atmosphere.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Comment Section -->
+                <div class="bg-white shadow-lg rounded-lg p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Leave a Comment</h2>
+                    <form action="#" method="POST">
+                        <!-- Name -->
+                        <div class="mb-6">
+                            <label for="name" class="block text-lg font-semibold text-gray-700 mb-2">Your Name</label>
+                            <input type="text" id="name" name="name"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your name">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-6">
+                            <label for="email" class="block text-lg font-semibold text-gray-700 mb-2">Your Email</label>
+                            <input type="email" id="email" name="email"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your email">
+                        </div>
+
+                        <!-- Comment -->
+                        <div class="mb-6">
+                            <label for="comment" class="block text-lg font-semibold text-gray-700 mb-2">Your
+                                Comment</label>
+                            <textarea id="comment" name="comment" rows="6"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Write your comment"></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit"
+                                class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition">
+                                Submit Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+
+    <body class="bg-gray-100">
+
+        <!-- Rating Section -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="bg-white shadow-lg rounded-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Rate this Blogs</h2>
+
+                <!-- Radio Buttons for Rating -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">How would you rate this
+                        blogs?</label>
+                    <div class="flex justify-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="1" class="form-radio text-blue-600">
+                            <span class="ml-2">1 Star</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="2" class="form-radio text-blue-600">
+                            <span class="ml-2">2 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="3" class="form-radio text-blue-600">
+                            <span class="ml-2">3 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="4" class="form-radio text-blue-600">
+                            <span class="ml-2">4 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="5" class="form-radio text-blue-600">
+                            <span class="ml-2">5 Stars</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Checkboxes for Feedback -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">What did you like about
+                        this blogs?</label>
+                    <div class="flex flex-wrap justify-center gap-6">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Well Researched</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Easy to Understand</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Interesting Topic</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Good Writing Style</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Dropdown for Article Length -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">Was the blogs too long or
+                        too short?</label>
+                    <select
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="just-right">Just the right length</option>
+                        <option value="too-short">Too short</option>
+                        <option value="too-long">Too long</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button
+                        class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-blue-700 hover:to-indigo-700 transition">
+                        Submit Feedback
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+    </body>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>© 2024 News Today. All rights reserved.</p>
+            <p><a href="#" class="text-blue-400 hover:text-blue-200">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

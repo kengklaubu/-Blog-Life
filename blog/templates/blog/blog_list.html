@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex-grow: 1;
+            padding-bottom: 2rem; /* เพิ่มที่ว่างให้กับ Footer */
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky-nav">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1><a href="{% url 'home' %}" class="text-3xl font-extrabold text-blue-600">Blog Life</a></h1>
+            <ul class="flex space-x-6 items-center">
+                <li><a href="{% url 'home' %}"
+                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Home</a></li>
+                <li><a href="{% url 'about' %}"
+                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a></li>
+                <li><a href="{% url 'bloglist' %}"
+                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
+                <li><a href="{% url 'write_blog' %}" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
+                <li><a href="{% url 'contact' %}"
+                        class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
+
+                <!-- Profile Section -->
+                <li class="relative">
+                    <div class="flex items-center space-x-2 cursor-pointer" id="profile-menu-toggle">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="User Profile"
+                            class="w-8 h-8 rounded-full">
+                        <span class="text-gray-600 hover:text-gray-900">Profile</span>
+                    </div>
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden">
+                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">View
+                            Profile</a>
+                        <a href="{% url 'setting' %}"
+                            class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
+                        <form id="logout-form" method="POST" action="{% url 'logout' %}" class="block">
+                            {% csrf_token %}
+                            <button type="submit"
+                                class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main>
+        <section class="bg-blue-600 text-white text-center py-12">
+            <h2 class="text-5xl font-bold mb-0">My Blogs</h2>
+        </section>
+
+        <section class="container mx-auto mt-12 px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for blog in blogs %}
+                <!-- Blog Card -->
+                <a href="{% url 'blog_details' blog.id %}" class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                    {% if blog.image %}
+                        <img src="{{ blog.image.url }}" alt="Blog Image" class="w-full h-48 object-cover">
+                    {% else %}
+                        <img src="/path/to/default/image.jpg" alt="Default Image" class="w-full h-48 object-cover"> <!-- ใส่ path ของรูปภาพ default ที่ต้องการ -->
+                    {% endif %}
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">{{ blog.title }}</h3>
+                        <p class="text-gray-600 mb-4">{{ blog.description }}</p>
+                        <span class="text-blue-600 hover:underline">Read more</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-auto">
+        <div class="container mx-auto text-center">
+            <p>© 2024 Blog Life. All rights reserved.</p>
+            <p><a href="#" class="text-blue-400 hover:text-blue-200">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Script to handle dropdown toggle
+        const profileMenuToggle = document.getElementById('profile-menu-toggle');
+        const profileMenu = document.getElementById('profile-menu');
+
+        // เปิด dropdown เมื่อคลิกที่โปรไฟล์
+        profileMenuToggle.addEventListener('click', (event) => {
+            // ป้องกันการปิด dropdown จากการคลิกภายนอก
+            event.stopPropagation();
+            // Toggle visibility of the dropdown menu
+            profileMenu.classList.toggle('hidden');
+        });
+
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            if (!profileMenuToggle.contains(event.target) && !profileMenu.contains(event.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

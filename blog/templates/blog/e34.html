@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* เพิ่มเงาเล็กน้อยใน navbar เมื่อมีการเลื่อน */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky-nav">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1><a href="{% url 'home' %}" class="text-3xl font-extrabold text-blue-600">Blog Life</a></h1>
+            <ul class="flex space-x-6 items-center">
+                <li><a href="{% url 'home' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Home</a></li>
+                <li><a href="{% url 'about' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a></li>
+                <li><a href="{% url 'bloglist' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
+                <li><a href="{% url 'write_blog' %}" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
+                <li><a href="{% url 'contact' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
+    
+                <!-- Profile Section -->
+                <li class="relative">
+                    <div class="flex items-center space-x-2 cursor-pointer" id="profile-menu-toggle">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="User Profile" class="w-8 h-8 rounded-full">
+                        <span class="text-gray-600 hover:text-gray-900">Profile</span>
+                    </div>
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden">
+                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">View Profile</a>
+                        <a href="{% url 'setting' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
+                        <form id="logout-form" method="POST" action="{% url 'logout' %}" class="block">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <script>
+        // Script to handle dropdown toggle
+        const profileMenuToggle = document.getElementById('profile-menu-toggle');
+        const profileMenu = document.getElementById('profile-menu');
+    
+        profileMenuToggle.addEventListener('click', () => {
+            // Toggle visibility of the dropdown menu
+            profileMenu.classList.toggle('hidden');
+        });
+    
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            if (!profileMenuToggle.contains(event.target) && !profileMenu.contains(event.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
+    <!-- Main Headline Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-20">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl font-extrabold mb-4">Remembering the BMW E34.</h1>
+            <p class="text-lg mb-8">This is about.</p>
+        </div>
+    </section>
+
+    <!-- News Details Section -->
+    <section class="container mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Main News Article -->
+            <article class="col-span-2 bg-white shadow-md rounded-lg p-8">
+                <img src="http://static1.squarespace.com/static/54dd407be4b0d35f6cfef75e/54f1cef1e4b0954a449f1974/54f1cef4e4b0954a449f1bca/1328561506000/engine.jpg?format=original"
+                    alt="Climate Conference" class="w-full h-64 object-cover rounded-lg mb-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Remembering the BMW E34.</h2>
+                <p class="text-gray-700 mb-6 leading-relaxed">
+                    My father owned this 1995 BMW 530i for more than 16 years before selling it in December, 2011. The
+                    530i had a very unique 3.0L V8, mated to a very slow-witted 4-speed auto. It also had incredible
+                    steering, comfortable ride, and seemed to shrink around you. This was the first car I ever drove (I
+                    think I was 14), and I remember spending way too long with a tiny brush trying to clean the the deep
+                    mesh spokes of the 15" wheels.
+
+                    This car was generously loaned to me for the summer of 2006 when I finished my last two college
+                    classes, and that's when I took these pictures. They were taken on a friend's borrowed Nikon D100
+                    (!) according to the metadata, and I kept them and cleaned them up and re-edited them to my current
+                    tastes this weekend. Unfortunately the car was dirty when I shot these and I didn't know what I was
+                    doing, but it didn't take much skill to make it look amazing. During most of my childhood I lusted
+                    after the E39 5-series, but the E34 design has aged very well and may emerge as a more timeless form
+                    if enough time passes.
+
+                    Eventually the maintenance issues and costs got a little too real, and so he finally sold it with I
+                    think around 200,000 miles on the clock. I'd love to own a different one, though I would prefer an
+                    E34 with a straight-six and a five-speed manual. Look at that – I made it through a whole post about
+                    BMWs without taking a swipe at the modern ones and talking about how soulless and bloated they all
+                    are.
+                </p>
+                <p class="text-gray-700 mb-6 leading-relaxed">
+                    There's a lot of words I never, ever use when I'm saying something is cool. "Sick," "wicked," "bad"
+                    all fall into that category. Usually. Somehow they sorta fit with this car. The E34 has as special
+                    place in my heart. The first car I ever drove was a black BMW E34, which my dad got in 1995 and
+                    still has to this day. By the time I was learning to drive, the E34 was already outclassed and
+                    outmatched by the contemporary German sedans of the day, and was beginning to look a little bit
+                    dated. But since then it's held up very well, and come to be regarded as a classic sport sedan.
+                    There's something to be said for a clean, compact design like this, especially today when modern
+                    BMWs are so cluttered, creased and gigantic.
+
+                    This rare E34 Touring, which had the badges removed, looks fantastic on the 18" wheels from the E38
+                    BMW 740i Sport. I remember these wheels being referred to as "James Bond BBS" somewhere but I have
+                    no idea if that's what they're actually called. This car was parked outside of an always-interesting
+                    BMW shop called Bavarian Machine that's just down the street from me.
+
+                    tags: BMW, E34, Instagram, Touring
+                    categories: Uncategorized
+
+                </p>
+
+            </article>
+
+            <!-- Related News Section -->
+            <aside class="col-span-1 space-y-8">
+                <!-- News Blog Section -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">News Blog</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                Renewable Energy: The Key to a Greener Future
+                            </a>
+                            <p class="text-gray-600">How renewable energy sources are transforming industries worldwide.</p>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                How Global Warming is Affecting Arctic Wildlife
+                            </a>
+                            <p class="text-gray-600">Examining the changes in Arctic ecosystems due to rising temperatures.</p>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                Innovations in Carbon Capture Technology
+                            </a>
+                            <p class="text-gray-600">New technologies aiming to capture and store CO2 from the atmosphere.</p>
+                        </li>
+                    </ul>
+                </div>
+            
+                <!-- Comment Section -->
+                <div class="bg-white shadow-lg rounded-lg p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Leave a Comment</h2>
+                    <form action="#" method="POST">
+                        <!-- Name -->
+                        <div class="mb-6">
+                            <label for="name" class="block text-lg font-semibold text-gray-700 mb-2">Your Name</label>
+                            <input type="text" id="name" name="name"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your name">
+                        </div>
+            
+                        <!-- Email -->
+                        <div class="mb-6">
+                            <label for="email" class="block text-lg font-semibold text-gray-700 mb-2">Your Email</label>
+                            <input type="email" id="email" name="email"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your email">
+                        </div>
+            
+                        <!-- Comment -->
+                        <div class="mb-6">
+                            <label for="comment" class="block text-lg font-semibold text-gray-700 mb-2">Your Comment</label>
+                            <textarea id="comment" name="comment" rows="6"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Write your comment"></textarea>
+                        </div>
+            
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit"
+                                class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition">
+                                Submit Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+
+
+    <body class="bg-gray-100">
+
+        <!-- Rating Section -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="bg-white shadow-lg rounded-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Rate this Blogs</h2>
+
+                <!-- Radio Buttons for Rating -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">How would you rate this
+                        blogs?</label>
+                    <div class="flex justify-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="1" class="form-radio text-blue-600">
+                            <span class="ml-2">1 Star</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="2" class="form-radio text-blue-600">
+                            <span class="ml-2">2 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="3" class="form-radio text-blue-600">
+                            <span class="ml-2">3 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="4" class="form-radio text-blue-600">
+                            <span class="ml-2">4 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="5" class="form-radio text-blue-600">
+                            <span class="ml-2">5 Stars</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Checkboxes for Feedback -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">What did you like about
+                        this blogs?</label>
+                    <div class="flex flex-wrap justify-center gap-6">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Well Researched</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Easy to Understand</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Interesting Topic</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Good Writing Style</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Dropdown for Article Length -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">Was the blogs too long or
+                        too short?</label>
+                    <select
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="just-right">Just the right length</option>
+                        <option value="too-short">Too short</option>
+                        <option value="too-long">Too long</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button
+                        class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-blue-700 hover:to-indigo-700 transition">
+                        Submit Feedback
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+    </body>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>© 2024 News Today. All rights reserved.</p>
+            <p><a href="#" class="text-blue-400 hover:text-blue-200">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

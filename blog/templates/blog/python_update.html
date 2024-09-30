@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* เพิ่มเงาเล็กน้อยใน navbar เมื่อมีการเลื่อน */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky-nav">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1><a href="{% url 'home' %}" class="text-3xl font-extrabold text-blue-600">Blog Life</a></h1>
+            <ul class="flex space-x-6 items-center">
+                <li><a href="{% url 'home' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Home</a></li>
+                <li><a href="{% url 'about' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">About</a></li>
+                <li><a href="{% url 'bloglist' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
+                <li><a href="{% url 'write_blog' %}" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
+                <li><a href="{% url 'contact' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
+    
+                <!-- Profile Section -->
+                <li class="relative">
+                    <div class="flex items-center space-x-2 cursor-pointer" id="profile-menu-toggle">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="User Profile" class="w-8 h-8 rounded-full">
+                        <span class="text-gray-600 hover:text-gray-900">Profile</span>
+                    </div>
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden">
+                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">View Profile</a>
+                        <a href="{% url 'setting' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
+                        <form id="logout-form" method="POST" action="{% url 'logout' %}" class="block">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <script>
+        // Script to handle dropdown toggle
+        const profileMenuToggle = document.getElementById('profile-menu-toggle');
+        const profileMenu = document.getElementById('profile-menu');
+    
+        profileMenuToggle.addEventListener('click', () => {
+            // Toggle visibility of the dropdown menu
+            profileMenu.classList.toggle('hidden');
+        });
+    
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            if (!profileMenuToggle.contains(event.target) && !profileMenu.contains(event.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+
+    <!-- Main Headline Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-20">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl font-extrabold mb-4">Update Python 3.12: Is it 2 times faster?</h1>
+            <p class="text-lg mb-8">Update Python 3.12: Is it 2 times faster? Key changes.</p>
+        </div>
+    </section>
+
+    <!-- News Details Section -->
+    <section class="container mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Main News Article -->
+            <article class="col-span-2 bg-white shadow-md rounded-lg p-8">
+                <img src="https://lh7-us.googleusercontent.com/OFBqwDpXDZlsx_JQ5ScLa784gpx5yAMyVDioLpM6s73kDVmQ8FEZM9GHN2n9DoM0C8lf9BURfiDQJHjIr4bJ4kejw0jadOay4M4PEghRVrfeAXmZDVFIaWcxo2uxwxfs2K1khgD8kR42ikXfmNAUVV4"
+                    alt="Climate Conference" class="w-full h-64 object-cover rounded-lg mb-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Changes in Python 3.12</h2>
+                <p class="text-gray-700 mb-6 leading-relaxed">
+                    Let's talk about the changes, as Python firmly maintains its leading position in the TIOBE Index for
+                    January 2024 & PYPL Popularity of Programming Language, surpassing Java, JS, and C/C++. What's the
+                    secret?
+
+                    I've divided the article into two parts: practical and theoretical.
+
+                    The first one (which you are currently reading) is the main one. Here, you will learn about the key
+                    changes introduced by the Python 3.12 release. We'll explore examples of using these changes, the
+                    advantages they bring, and whether it's worth transitioning to the new version as quickly as
+                    possible.
+
+                    In the second part, we'll focus more on the performance comparison of the latest versions: from
+                    installing Python versions over the last 5 years (versions 3.8-3.12) using pyenv to benchmarking
+                    speed measurements and comparing these results (link to the second part you'll find at the end of
+                    this article)..
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    With the climate crisis continuing to escalate, world leaders are faced with the challenge of
+                    creating
+                    actionable plans that balance environmental concerns with economic growth. The conference is
+                    expected to
+                    result in new international agreements and policies aimed at mitigating the worst effects of global
+                    warming.
+                </p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    New syntax for type parameters — type
+                </h2>
+                <p class="text-gray-700 leading-relaxed">
+                    Let's recall that in Python 3.5 (PEP 484), the concept of type hints for variables was introduced.
+                    The development of this idea continued with PEP 612, which introduced parameter specifications, and
+                    PEP 646, which extended this concept to variable annotations for variational types.
+                    While generic types and type parameters have become popular, the syntax for defining type parameters
+                    still looks somewhat "attached" to Python. This has led to confusion among Python developers.
+                </p>
+            </article>
+
+            <!-- Related News Section -->
+            <aside class="col-span-1 space-y-8">
+                <!-- News Blog Section -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">News Blog</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                Renewable Energy: The Key to a Greener Future
+                            </a>
+                            <p class="text-gray-600">How renewable energy sources are transforming industries worldwide.</p>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                How Global Warming is Affecting Arctic Wildlife
+                            </a>
+                            <p class="text-gray-600">Examining the changes in Arctic ecosystems due to rising temperatures.</p>
+                        </li>
+                        <li>
+                            <a href="#" class="block text-blue-600 hover:underline">
+                                Innovations in Carbon Capture Technology
+                            </a>
+                            <p class="text-gray-600">New technologies aiming to capture and store CO2 from the atmosphere.</p>
+                        </li>
+                    </ul>
+                </div>
+            
+                <!-- Comment Section -->
+                <div class="bg-white shadow-lg rounded-lg p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Leave a Comment</h2>
+                    <form action="#" method="POST">
+                        <!-- Name -->
+                        <div class="mb-6">
+                            <label for="name" class="block text-lg font-semibold text-gray-700 mb-2">Your Name</label>
+                            <input type="text" id="name" name="name"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your name">
+                        </div>
+            
+                        <!-- Email -->
+                        <div class="mb-6">
+                            <label for="email" class="block text-lg font-semibold text-gray-700 mb-2">Your Email</label>
+                            <input type="email" id="email" name="email"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your email">
+                        </div>
+            
+                        <!-- Comment -->
+                        <div class="mb-6">
+                            <label for="comment" class="block text-lg font-semibold text-gray-700 mb-2">Your Comment</label>
+                            <textarea id="comment" name="comment" rows="6"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Write your comment"></textarea>
+                        </div>
+            
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit"
+                                class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition">
+                                Submit Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+            
+        </div>
+    </section>
+
+
+    <body class="bg-gray-100">
+
+        <!-- Rating Section -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="bg-white shadow-lg rounded-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Rate this Blogs</h2>
+        
+                <!-- Radio Buttons for Rating -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">How would you rate this blogs?</label>
+                    <div class="flex justify-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="1" class="form-radio text-blue-600">
+                            <span class="ml-2">1 Star</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="2" class="form-radio text-blue-600">
+                            <span class="ml-2">2 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="3" class="form-radio text-blue-600">
+                            <span class="ml-2">3 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="4" class="form-radio text-blue-600">
+                            <span class="ml-2">4 Stars</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="rating" value="5" class="form-radio text-blue-600">
+                            <span class="ml-2">5 Stars</span>
+                        </label>
+                    </div>
+                </div>
+        
+                <!-- Checkboxes for Feedback -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">What did you like about this blogs?</label>
+                    <div class="flex flex-wrap justify-center gap-6">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Well Researched</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Easy to Understand</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Interesting Topic</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox text-blue-600">
+                            <span class="ml-2">Good Writing Style</span>
+                        </label>
+                    </div>
+                </div>
+        
+                <!-- Dropdown for Article Length -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">Was the blogs too long or too short?</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="just-right">Just the right length</option>
+                        <option value="too-short">Too short</option>
+                        <option value="too-long">Too long</option>
+                    </select>
+                </div>
+        
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-blue-700 hover:to-indigo-700 transition">
+                        Submit Feedback
+                    </button>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Footer -->
+    </body>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>© 2024 News Today. All rights reserved.</p>
+            <p><a href="#" class="text-blue-400 hover:text-blue-200">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>
+

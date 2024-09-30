@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ทำให้ Navbar อยู่ด้านบนเสมอและเพิ่มเงาเมื่อมีการเลื่อน */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* จัดสไตล์ให้กับหน้าต่างล็อกอิน (Modal) */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky-nav">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- โลโก้เว็บ -->
+            <h1><a href="{% url 'noneloginhome' %}" class="text-3xl font-extrabold text-blue-600">Blog Life</a></h1>
+            <ul class="flex space-x-6 items-center">
+                <li><a href="#" id="homeBtn" class="text-gray-600 hover:text-gray-900">Home</a></li>
+                <li><a href="#" id="aboutBtn" class="text-gray-600 hover:text-gray-900">About</a></li>
+                <li><a href="#" id="blogsBtn" class="text-gray-600 hover:text-gray-900">Blogs</a></li>
+                <li><a href="#" id="writeBlogBtn" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
+                <li><a href="#" id="contactBtn" class="text-gray-600 hover:text-gray-900">Contact</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- หน้าต่างล็อกอิน (Modal) -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">Login</h2>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-6">
+                    <label for="username" class="block text-lg font-medium text-gray-700 mb-2">Username or Email</label>
+                    <input type="text" id="username" name="username"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your username or email">
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="block text-lg font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" name="password"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your password">
+                </div>
+
+                <div class="text-center">
+                    <button type="submit"
+                        class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition w-full">
+                        Login
+                    </button>
+                </div>
+            </form>
+            <!-- ปุ่มปิด Modal -->
+            <button id="closeModal" class="mt-4 text-red-600 hover:underline">Cancel</button>
+            <!-- ปุ่มสมัครสมาชิก -->
+            <button id="signupBtn" class="mt-2 text-blue-600 hover:underline">Sign Up</button>
+        </div>
+    </div>
+
+    <!-- ส่วนเนื้อหาหลัก -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-24">
+        <div class="container mx-auto">
+            <h1 class="text-5xl font-extrabold mb-4">Welcome to Blog Life</h1>
+            <p class="text-lg mb-8">Share your thoughts, ideas, and stories with the world.</p>
+            <!-- ปุ่มเริ่มเขียนบทความ ซึ่งจะเปิด Modal ล็อกอิน -->
+            <a href="#" id="startWritingBtn"
+                class="bg-white text-blue-600 font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-gray-200 transition">Start
+                Writing</a>
+        </div>
+    </section>
+
+    <!-- Script สำหรับจัดการ Modal -->
+    <script>
+        const loginModal = document.getElementById('loginModal');
+        const writeBlogBtn = document.getElementById('writeBlogBtn');
+        const homeBtn = document.getElementById('homeBtn');
+        const aboutBtn = document.getElementById('aboutBtn');
+        const blogBtn = document.getElementById('blogsBtn');
+        const contactBtn = document.getElementById('contactBtn');
+        const startWritingBtn = document.getElementById('startWritingBtn');
+        const closeModal = document.getElementById('closeModal');
+        const signupBtn = document.getElementById('signupBtn');
+
+        // ฟังก์ชันเปิด Modal
+        const openModal = () => {
+            loginModal.style.display = 'flex';
+        }
+
+        // ฟังก์ชันปิด Modal
+        const closeModalFunction = () => {
+            loginModal.style.display = 'none';
+        }
+
+        // เปิด Modal เมื่อคลิกปุ่ม 'Write a Blog' หรือ 'Start Writing'
+        writeBlogBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
+            openModal();
+        });
+
+        closeModal.addEventListener('click', closeModalFunction);
+
+        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeModalFunction();
+            }
+        });
+
+        homeBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
+            openModal();
+        });
+
+        closeModal.addEventListener('click', closeModalFunction);
+
+        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeModalFunction();
+            }
+        });
+
+        aboutBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
+            openModal();
+        });
+
+        closeModal.addEventListener('click', closeModalFunction);
+
+        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeModalFunction();
+            }
+        });
+
+        blogBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
+            openModal();
+        });
+
+        closeModal.addEventListener('click', closeModalFunction);
+
+        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeModalFunction();
+            }
+        });
+
+        contactBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
+            openModal();
+        });
+
+        closeModal.addEventListener('click', closeModalFunction);
+
+        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeModalFunction();
+            }
+        });
+
+        startWritingBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            openModal();
+        });
+
+        // ปิด Modal เมื่อคลิกปุ่มปิด
+        closeModal.addEventListener('click', closeModalFunction);
+
+        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeModalFunction();
+            }
+        });
+
+        // ฟังก์ชันปุ่มสมัครสมาชิก
+        signupBtn.addEventListener('click', () => {
+            window.location.href = '{% url "register" %}';
+        });
+
+    </script>
+
+
+    <section class="container mx-auto px-4 py-16"></section>
+    <h2 class="text-4xl font-semibold text-center mb-12 text-gray-800">Popular Blogs</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <!-- Blog Post 1 -->
+        <a href=""
+            class="bg-white shadow-lg rounded-lg overflow-hidden duration-300">
+            <img src="https://flyaps.com/blog/content/images/size/w960/2024/02/Python-3.12-Key-changes.jpg"
+                alt="Blog Image 1" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Update Python 3.12: Is it 2 times faster? </h3>
+                <p class="text-gray-600 mb-4">Let's talk about the changes, as Python firmly maintains its leading
+                    position in the TIOBE Index for January 2024 & PYPL Popularity of Programming Language,
+                    surpassing Java, JS, and C/C++. What's the secret?.</p>
+                <span class="text-blue-600 hover:underline">Read more</span>
+            </div>
+        </a>
+
+        <!-- Blog Post 2 -->
+        <a href=""
+            class="bg-white shadow-lg rounded-lg overflow-hidden duration-300">
+            <img src="https://images.squarespace-cdn.com/content/v1/54dd407be4b0d35f6cfef75e/1425133411593-R8P3RVRDBYT4EHVKEP2J/DSC_0075.jpg?format=1500w"
+                alt="Blog Image 2" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Remembering the BMW E34.</h3>
+                <p class="text-gray-600 mb-4">Discover why blogging is still a powerful tool for personal and
+                    professional growth.</p>
+                <span class="text-blue-600 hover:underline">Read more</span>
+            </div>
+        </a>
+
+        <!-- Blog Post 3 -->
+        <a href=""
+            class="bg-white shadow-lg rounded-lg overflow-hidden duration-300">
+            <img src="https://taglineinfotech.com/wp-content/uploads/2023/10/Node-20-Whats-new-in-the-latest-version-of-Node.png"
+                alt="Blog Image 3" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Node 20: What’s new in the latest version of Node?
+                </h3>
+                <p class="text-gray-600 mb-4">The Node.js community and team are known for breaking barriers
+                    globally for their recent updates and features and following their conventional trend of success
+                    for Node 19..</p>
+                <span class="text-blue-600 hover:underline">Read more</span>
+            </div>
+        </a>
+    </div>
+
+    </section>
+
+
+</body>
+
+</html>
