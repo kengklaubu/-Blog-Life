@@ -87,6 +87,7 @@
             <button id="closeModal" class="mt-4 text-red-600 hover:underline">Cancel</button>
             <!-- ปุ่มสมัครสมาชิก -->
             <button id="signupBtn" class="mt-2 text-blue-600 hover:underline">Sign Up</button>
+            <button id="forgotPasswordBtn" class="mt-2 text-blue-600 hover:underline">Forgot Password?</button>
         </div>
     </div>
 
@@ -113,109 +114,51 @@
         const startWritingBtn = document.getElementById('startWritingBtn');
         const closeModal = document.getElementById('closeModal');
         const signupBtn = document.getElementById('signupBtn');
-
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+    
         // ฟังก์ชันเปิด Modal
         const openModal = () => {
             loginModal.style.display = 'flex';
-        }
-
+        };
+    
         // ฟังก์ชันปิด Modal
         const closeModalFunction = () => {
             loginModal.style.display = 'none';
-        }
-
-        // เปิด Modal เมื่อคลิกปุ่ม 'Write a Blog' หรือ 'Start Writing'
-        writeBlogBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
-            openModal();
-        });
-
-        closeModal.addEventListener('click', closeModalFunction);
-
+        };
+    
         // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
-        loginModal.addEventListener('click', (event) => {
+        const modalClickOutside = (event) => {
             if (event.target === loginModal) {
                 closeModalFunction();
             }
-        });
-
-        homeBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
-            openModal();
-        });
-
+        };
+    
+        // เพิ่มการฟัง event ที่ต้องการเปิด Modal
+        const addOpenModalEvent = (button) => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                openModal();
+            });
+        };
+    
+        // ฟังก์ชันเปิด Modal เมื่อคลิกปุ่ม
+        [writeBlogBtn, homeBtn, aboutBtn, blogBtn, contactBtn, startWritingBtn].forEach(addOpenModalEvent);
+    
+        // ปิด Modal เมื่อคลิกปุ่มปิดหรือด้านนอก
         closeModal.addEventListener('click', closeModalFunction);
-
-        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
-        loginModal.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                closeModalFunction();
-            }
-        });
-
-        aboutBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
-            openModal();
-        });
-
-        closeModal.addEventListener('click', closeModalFunction);
-
-        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
-        loginModal.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                closeModalFunction();
-            }
-        });
-
-        blogBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
-            openModal();
-        });
-
-        closeModal.addEventListener('click', closeModalFunction);
-
-        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
-        loginModal.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                closeModalFunction();
-            }
-        });
-
-        contactBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // ป้องกันการทำงานปกติของลิงก์
-            openModal();
-        });
-
-        closeModal.addEventListener('click', closeModalFunction);
-
-        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
-        loginModal.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                closeModalFunction();
-            }
-        });
-
-        startWritingBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            openModal();
-        });
-
-        // ปิด Modal เมื่อคลิกปุ่มปิด
-        closeModal.addEventListener('click', closeModalFunction);
-
-        // ปิด Modal เมื่อคลิกนอกเนื้อหา Modal
-        loginModal.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                closeModalFunction();
-            }
-        });
-
+        loginModal.addEventListener('click', modalClickOutside);
+    
         // ฟังก์ชันปุ่มสมัครสมาชิก
         signupBtn.addEventListener('click', () => {
             window.location.href = '{% url "register" %}';
         });
-
+    
+        // ฟังก์ชันปุ่มลืมรหัสผ่าน
+        forgotPasswordBtn.addEventListener('click', () => {
+            window.location.href = '{% url "password_reset" %}';
+        });
     </script>
+    
 
 
     <section class="container mx-auto px-4 py-16"></section>
