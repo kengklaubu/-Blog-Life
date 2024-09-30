@@ -44,15 +44,24 @@ def user_login(request):
 
 @login_required
 def profile(request):
-    return render(request, 'blog/profile.html')
+    return render(request, 'blog/profile.html', {'user': request.user})
+
 
 @login_required
 def editprofile(request):
     return render(request, 'blog/edit_profile.html')
 
+
+
+
+
+from django.shortcuts import render, redirect
 @login_required
 def setting(request):
     return render(request, 'blog/setting.html')
+    
+        
+
 
 def none_login(request):
     return render(request, 'blog/nonelogin_home.html')
@@ -146,26 +155,77 @@ def write_blog(request):
 
 
 
+# blog/views.py
 
-from django.shortcuts import render
-from .models import Blog
-
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Blog, Comment
+from .forms import CommentForm
+import json
+@login_required
 def blog_list(request):
-    query = request.GET.get('q')
-    if query:
-        blogs = Blog.objects.filter(title__icontains=query)  # ค้นหาโดยใช้ชื่อบล็อก
-    else:
-        blogs = Blog.objects.all()
-    return render(request, 'blog/blog_list.html', {'blogs': blogs})
+    blogs = Blog.objects.all()
+    blog_titles = [blog.title for blog in blogs]
+    blog_views = [blog.views for blog in blogs]
+    
+    context = {
+        'blogs': blogs,
+        'blog_titles': json.dumps(blog_titles),
+        'blog_views': json.dumps(blog_views),
+    }
+    return render(request, 'blog/blog_list.html', context)
 
-
-
-from django.shortcuts import render, get_object_or_404
-from .models import Blog
 @login_required
 def blog_details(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
-    return render(request, 'blog/blog_details.html', {'blog': blog})
+    blog.views += 1
+    blog.save()
+
+    comments = blog.comments.all().order_by('-created_at')  # ดึงคอมเมนต์ที่เกี่ยวข้องกับบล็อก
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.blog = blog
+                comment.user = request.user
+                comment.save()
+                return redirect('blog_details', blog_id=blog.id)
+        else:
+            return redirect('login')  # ถ้าไม่ได้ล็อกอินให้ไปที่หน้า login
+    else:
+        form = CommentForm()
+
+    context = {
+        'blog': blog,
+        'comments': comments,
+        'form': form,
+    }
+    return render(request, 'blog/blog_details.html', context)
+
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .models import Comment
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    
+    # ตรวจสอบสิทธิ์การลบ (เจ้าของคอมเมนต์หรือเจ้าของบล็อก)
+    if comment.user == request.user or comment.blog.user == request.user:
+        comment.delete()
+        return redirect('blog_details', blog_id=comment.blog.id)
+    else:
+        return HttpResponseForbidden("You don't have permission to delete this comment.")
+
+
+
+
+
+
 
 
 
@@ -196,7 +256,7 @@ def password_reset_view(request):
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Blog
-
+@login_required
 def edit_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
 

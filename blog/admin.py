@@ -7,6 +7,7 @@ admin.site.register(Post)  # ลงทะเบียนโมเดลของ
 
 
 
+
 from django.contrib import admin
 from .models import Blog
 

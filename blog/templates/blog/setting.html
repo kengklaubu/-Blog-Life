@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
     <!-- Navbar -->
@@ -18,7 +20,7 @@
                 <li><a href="{% url 'bloglist' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Blogs</a></li>
                 <li><a href="{% url 'write_blog' %}" class="text-gray-600 hover:text-gray-900">Write a Blog</a></li>
                 <li><a href="{% url 'contact' %}" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">Contact</a></li>
-    
+
                 <!-- Profile Section -->
                 <li class="relative">
                     <div class="flex items-center space-x-2 cursor-pointer" id="profile-menu-toggle">
@@ -40,19 +42,19 @@
             </ul>
         </div>
     </nav>
-    
+
     <script>
         // Script to handle dropdown toggle
         const profileMenuToggle = document.getElementById('profile-menu-toggle');
         const profileMenu = document.getElementById('profile-menu');
-    
+
         profileMenuToggle.addEventListener('click', () => {
             // Toggle visibility of the dropdown menu
             profileMenu.classList.toggle('hidden');
         });
-    
+
         // Close the dropdown if clicked outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             if (!profileMenuToggle.contains(event.target) && !profileMenu.contains(event.target)) {
                 profileMenu.classList.add('hidden');
             }
@@ -64,21 +66,43 @@
         <div class="bg-white shadow-md rounded-lg p-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Settings</h2>
 
-            <form action="#" method="POST">
+            <!-- Display Success or Error Messages -->
+            {% if form.errors %}
+                <div class="bg-red-500 text-white px-4 py-2 rounded-md my-2">
+                    Please correct the error below.
+                </div>
+            {% endif %}
+            {% if not form.errors and messages %}
+                <div class="bg-green-500 text-white px-4 py-2 rounded-md my-2">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form action="{% url 'setting' %}" method="POST">
+                {% csrf_token %}
+
                 <!-- Change Password -->
                 <div class="mb-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Change Password</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Current Password -->
                         <div>
-                            <label for="current_password" class="block text-gray-700">Current Password</label>
-                            <input type="password" id="current_password" name="current_password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter current password">
+                            <label for="id_old_password" class="block text-gray-700">Current Password</label>
+                            {{ password_form.old_password }}
                         </div>
 
                         <!-- New Password -->
                         <div>
-                            <label for="new_password" class="block text-gray-700">New Password</label>
-                            <input type="password" id="new_password" name="new_password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter new password">
+                            <label for="id_new_password1" class="block text-gray-700">New Password</label>
+                            {{ password_form.new_password1 }}
+                        </div>
+
+                        <!-- Confirm New Password -->
+                        <div>
+                            <label for="id_new_password2" class="block text-gray-700">Confirm New Password</label>
+                            {{ password_form.new_password2 }}
                         </div>
                     </div>
                 </div>
@@ -88,15 +112,15 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Email Notifications</h3>
                     <div class="space-y-4">
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="notify_blog_updates" class="form-checkbox text-blue-600">
+                            <input type="checkbox" name="notify_blog_updates" class="form-checkbox text-blue-600" {% if user.profile.notify_blog_updates %}checked{% endif %}>
                             <span class="ml-2 text-gray-700">Notify me about blog updates</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="notify_comments" class="form-checkbox text-blue-600">
+                            <input type="checkbox" name="notify_comments" class="form-checkbox text-blue-600" {% if user.profile.notify_comments %}checked{% endif %}>
                             <span class="ml-2 text-gray-700">Notify me when someone comments on my blog</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="notify_newsletters" class="form-checkbox text-blue-600">
+                            <input type="checkbox" name="notify_newsletters" class="form-checkbox text-blue-600" {% if user.profile.notify_newsletters %}checked{% endif %}>
                             <span class="ml-2 text-gray-700">Subscribe to newsletters</span>
                         </label>
                     </div>
@@ -107,11 +131,11 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Privacy Settings</h3>
                     <div class="space-y-4">
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="show_profile_public" class="form-checkbox text-blue-600">
+                            <input type="checkbox" name="show_profile_public" class="form-checkbox text-blue-600" {% if user.profile.show_profile_public %}checked{% endif %}>
                             <span class="ml-2 text-gray-700">Make my profile public</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="allow_friend_requests" class="form-checkbox text-blue-600">
+                            <input type="checkbox" name="allow_friend_requests" class="form-checkbox text-blue-600" {% if user.profile.allow_friend_requests %}checked{% endif %}>
                             <span class="ml-2 text-gray-700">Allow friend requests</span>
                         </label>
                     </div>
@@ -122,6 +146,7 @@
                     <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition">Save Changes</button>
                 </div>
             </form>
+
         </div>
     </section>
 
@@ -134,4 +159,5 @@
     </footer>
 
 </body>
+
 </html>
