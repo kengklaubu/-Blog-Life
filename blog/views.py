@@ -179,6 +179,12 @@ def blog_stats(request):
     }
     return render(request, 'blog/blog_stats.html', context)
 
+from django.shortcuts import render
+
+def password_reset_view(request):
+    return render(request, 'password_reset_form.html')
+
+
 
 
 

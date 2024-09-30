@@ -43,9 +43,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-# Application definition
 
-# blogproject/settings.py
 
 TAILWIND_APP_NAME = 'theme'  # ชื่อแอปที่ถูกสร้างโดย Tailwind
 
@@ -64,6 +62,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = 'login'  # เปลี่ยนไปยังเส้นทางของหน้า login
 LOGIN_REDIRECT_URL = 'home'  # หน้าแรกหลังจากที่ล็อกอินเสร็จ
 LOGOUT_REDIRECT_URL = '/'  # เปลี่ยนไปยังหน้าที่คุณต้องการ
+
+
+
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'forgetd69@gmail.com'  # เปลี่ยนเป็นอีเมลของคุณ
+EMAIL_HOST_PASSWORD = 'mislcvhkaltirjsr'     # รหัสผ่านอีเมลของคุณ
+DEFAULT_FROM_EMAIL = 'forgetd69@gmail.com'
+
 
 
 
